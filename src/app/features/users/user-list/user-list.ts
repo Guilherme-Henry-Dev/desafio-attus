@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
 
@@ -11,7 +17,13 @@ import { User } from '../../../core/models/user.model';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.scss'
@@ -22,18 +34,11 @@ export class UserListComponent implements OnInit {
 
   protected users = this.userService.filteredUsers;
   protected loading = this.userService.loading;
+  protected error = this.userService.error;
   protected searchControl = new FormControl('');
   protected modalOpen = false;
   protected selectedUser?: User;
   protected userForm: FormGroup;
-
-  get isModalOpen(): boolean {
-    return this.modalOpen;
-  }
-
-  get modalTitle(): string {
-    return this.selectedUser ? 'Editar usuário' : 'Adicionar novo usuário';
-  }
 
   constructor() {
     this.userForm = this.fb.group({
@@ -54,6 +59,26 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.loadUsers('').subscribe();
+  }
+
+  get emailControl() {
+    return this.userForm.get('email')!;
+  }
+
+  get nameControl() {
+    return this.userForm.get('name')!;
+  }
+
+  get cpfControl() {
+    return this.userForm.get('cpf')!;
+  }
+
+  get phoneControl() {
+    return this.userForm.get('phone')!;
+  }
+
+  get modalTitle(): string {
+    return this.selectedUser ? 'Editar usuário' : 'Adicionar novo usuário';
   }
 
   openModal(user?: User): void {

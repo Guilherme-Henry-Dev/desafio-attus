@@ -1,93 +1,104 @@
 <div class="page-header">
   <div class="page-title">
     <div class="title-badge">USUÁRIOS</div>
+    <h1>Listagem de usuários</h1>
   </div>
   <div class="page-actions">
-    <div class="search">
-      <input type="text" [formControl]="searchControl" placeholder="Pesquisar..." />
-    </div>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Pesquisar</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Nome, e-mail, CPF ou telefone" />
+    </mat-form-field>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-header">
-    <span>Usuários cadastrados</span>
-  </div>
+<mat-card class="list-card">
+  <div class="list-card-header">Usuários cadastrados</div>
 
-  @if (loading()) {
-    <div class="empty-state">Carregando usuários...</div>
+  @if (error()) {
+    <div class="error-state">{{ error() }}</div>
+  } @else if (loading()) {
+    <div class="loading-state">
+      <mat-progress-spinner diameter="28" mode="indeterminate"></mat-progress-spinner>
+      <span>Carregando usuários...</span>
+    </div>
   } @else {
     <div class="user-list">
       @if (users().length === 0) {
         <div class="empty-state">Nenhum usuário encontrado.</div>
       }
       @for (user of users(); track user.id) {
-        <div class="user-row">
-          <div class="user-avatar">👤</div>
-          <div class="user-info">
-            <strong>{{ user.name }}</strong>
-            <span>{{ user.email }}</span>
-            <small>{{ user.cpf }} · {{ user.phone }}</small>
+        <mat-card class="user-card">
+          <div class="user-card-content">
+            <div class="user-card-details">
+              <div class="user-name">{{ user.name }}</div>
+              <div class="user-email">{{ user.email }}</div>
+              <div class="user-meta">{{ user.cpf }} · {{ user.phone }}</div>
+            </div>
+            <div class="user-actions">
+              <button mat-stroked-button color="primary" type="button" (click)="openModal(user)">Editar</button>
+              <button mat-stroked-button color="warn" type="button" (click)="deleteUser(user.id!)">Excluir</button>
+            </div>
           </div>
-          <div class="user-actions">
-            <button class="icon-button" type="button" (click)="openModal(user)">Editar</button>
-            <button class="icon-button danger" type="button" (click)="deleteUser(user.id!)">Excluir</button>
-          </div>
-        </div>
+        </mat-card>
       }
     </div>
   }
-</div>
+</mat-card>
 
-<button class="fab" type="button" (click)="openModal()">+</button>
+<button mat-fab color="warn" class="fab" type="button" (click)="openModal()">+</button>
 
 @if (modalOpen) {
   <div class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-title">{{ selectedUser ? 'Editar usuário' : 'Adicionar novo usuário' }}</div>
+    <mat-card class="modal-card">
+      <div class="modal-title">{{ modalTitle }}</div>
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
         <div class="field-row">
-          <label class="field-label">
-            Usuário (e-mail) *
-            <input type="email" formControlName="email" placeholder="nome@empresa.com" />
-          </label>
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="nome@empresa.com" />
+            <mat-error *ngIf="emailControl.hasError('required')">E-mail obrigatório.</mat-error>
+            <mat-error *ngIf="emailControl.hasError('email')">Formato de e-mail inválido.</mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-row">
-          <label class="field-label">
-            Nome completo *
-            <input formControlName="name" placeholder="Nome e sobrenome" />
-          </label>
+          <mat-form-field appearance="outline">
+            <mat-label>Nome completo</mat-label>
+            <input matInput formControlName="name" placeholder="Nome e sobrenome" />
+            <mat-error *ngIf="nameControl.hasError('required')">Nome é obrigatório.</mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-grid">
-          <label class="field-label">
-            CPF *
-            <input formControlName="cpf" placeholder="000.000.000-00" />
-          </label>
-          <label class="field-label">
-            Número do telefone *
-            <input formControlName="phone" placeholder="(00) 00000-0000" />
-          </label>
+          <mat-form-field appearance="outline">
+            <mat-label>CPF</mat-label>
+            <input matInput formControlName="cpf" placeholder="000.000.000-00" />
+            <mat-error *ngIf="cpfControl.hasError('required')">CPF é obrigatório.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="phone" placeholder="(00) 00000-0000" />
+            <mat-error *ngIf="phoneControl.hasError('required')">Telefone é obrigatório.</mat-error>
+          </mat-form-field>
         </div>
 
         <div class="field-row">
-          <label class="field-label">
-            Tipo de telefone
-            <select formControlName="phoneType">
-              <option value="CELULAR">CELULAR</option>
-              <option value="FIXO">FIXO</option>
-            </select>
-          </label>
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de telefone</mat-label>
+            <mat-select formControlName="phoneType">
+              <mat-option value="CELULAR">CELULAR</mat-option>
+              <mat-option value="FIXO">FIXO</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
         <div class="note">O usuário receberá uma senha provisória por SMS.</div>
 
         <div class="modal-actions">
-          <button type="button" class="secondary" (click)="closeModal()">Cancelar</button>
-          <button type="submit" class="primary" [disabled]="userForm.invalid">Salvar</button>
+          <button mat-button type="button" (click)="closeModal()">Cancelar</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="userForm.invalid">Salvar</button>
         </div>
       </form>
-    </div>
+    </mat-card>
   </div>
 }

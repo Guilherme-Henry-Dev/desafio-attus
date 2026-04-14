@@ -10,7 +10,8 @@
 
 .page-title {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .title-badge {
@@ -20,127 +21,92 @@
   color: #555;
 }
 
-.page-actions {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
+.page-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
 }
 
-.search {
+.page-actions {
   width: 100%;
   max-width: 420px;
 }
 
-.search input {
+.search-field {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background: #f7f7f7;
-  font-size: 0.95rem;
 }
 
-.card {
+.list-card {
   max-width: 960px;
   margin: 0 auto 24px;
   padding: 24px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.06);
-  border: 1px solid #ececec;
+  border-radius: 20px;
 }
 
-.card-header {
+.list-card-header {
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 18px;
-  color: #333;
-  border-bottom: 1px solid #ececec;
-  padding-bottom: 12px;
+}
+
+.error-state {
+  color: #b00020;
+  background: #fdecea;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #555;
+  padding: 18px 0;
 }
 
 .user-list {
   display: grid;
-  gap: 12px;
-}
-
-.user-row {
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto;
   gap: 14px;
-  align-items: center;
-  padding: 16px 18px;
-  border-radius: 12px;
-  background: #fafafa;
-  border: 1px solid #ececec;
 }
 
-.user-avatar {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #e2e8f0;
-  font-size: 1.2rem;
+.user-card {
+  width: 100%;
+  border-radius: 18px;
 }
 
-.user-info {
+.user-card-content {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
-.user-info strong {
+.user-card-details {
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 700;
   font-size: 1rem;
 }
 
-.user-info span {
-  color: #666;
+.user-email,
+.user-meta {
+  color: #6f6f6f;
   font-size: 0.95rem;
 }
 
 .user-actions {
   display: flex;
   gap: 10px;
-}
-
-.icon-button {
-  min-width: 90px;
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background: white;
-  cursor: pointer;
-  color: #333;
-}
-
-.icon-button.danger {
-  border-color: #f4c1c4;
-  background: #fff5f6;
-  color: #b92f35;
-}
-
-.user-info small {
-  display: block;
-  margin-top: 6px;
-  color: #7a7a7a;
-  font-size: 0.88rem;
+  flex-wrap: wrap;
 }
 
 .fab {
   position: fixed;
   right: 28px;
   bottom: 28px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: #1f7aef;
-  color: white;
-  font-size: 1.8rem;
-  box-shadow: 0 12px 28px rgba(31, 122, 239, 0.28);
-  cursor: pointer;
+  z-index: 1000;
 }
 
 .modal-backdrop {
@@ -149,78 +115,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 20, 20, 0.4);
+  background: rgba(20, 20, 20, 0.5);
   z-index: 999;
+  padding: 16px;
 }
 
-.modal {
-  width: min(100%, 520px);
-  border-radius: 22px;
-  background: white;
+.modal-card {
+  width: min(100%, 560px);
   padding: 28px 30px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.16);
+  border-radius: 22px;
 }
 
 .modal-title {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 22px;
-  color: #111;
-}
-
-.modal form {
-  display: grid;
-  gap: 18px;
-  width: 100%;
 }
 
 .field-row,
 .field-grid {
   display: grid;
-  gap: 16px;
-  width: 100%;
+  gap: 18px;
 }
 
 .field-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.field-grid label,
-.field-row label {
-  min-width: 0;
-}
-
-.field-label {
-  display: grid;
-  gap: 8px;
-  color: #3c3c3c;
-  font-size: 0.9rem;
-  width: 100%;
-}
-
-.field-label input,
-.field-label select {
-  width: 100%;
-  min-width: 0;
-  min-height: 50px;
-  padding: 14px 16px;
-  border: 1px solid #e2e2e2;
-  border-radius: 14px;
-  font-size: 0.95rem;
-  background: #f6f7f9;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.field-label input:focus,
-.field-label select:focus {
-  border-color: #90b0ff;
-  box-shadow: 0 0 0 4px rgba(31, 122, 239, 0.08);
-}
-
 .note {
   color: #5f6c7b;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   background: #f4f7fb;
   border: 1px solid #dde7f1;
   border-radius: 14px;
@@ -231,27 +155,13 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-button.primary {
-  background: #0e75f7;
-  color: white;
-  min-width: 112px;
+mat-form-field {
+  width: 100%;
 }
 
-button.secondary {
-  background: #f7f8fb;
-  color: #252525;
-  min-width: 112px;
-  border: 1px solid #d3d6dc;
-}
-
-button.primary {
-  background: #1f7aef;
-  color: white;
-}
-
-button.secondary {
-  background: #f1f3f5;
-  color: #333;
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 14px;
 }
