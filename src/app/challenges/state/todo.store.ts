@@ -1,12 +1,35 @@
-@Component({ ... })
-export class CartCounterComponent {
-  items = signal<Item[]>([]); // Signal de lista
-  total = computed(() => this.items().reduce((acc, i) => acc + (i.preco * i.quantidade), 0)); // Computed
-  totalChanged = output<number>(); // Novo output() do Angular 17.3
+import { Injectable, signal, computed } from '@angular/core';
 
-  constructor() {
-    effect(() => this.totalChanged.emit(this.total())); // Efeito colateral reativo
+interface Todo {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+@Injectable({ providedIn: 'root' })
+export class TodoStore {
+  private todos = signal<Todo[]>([]);
+
+  todosList = this.todos.asReadonly();
+  completedCount = computed(() => this.todos().filter(t => t.completed).length);
+  totalCount = computed(() => this.todos().length);
+
+  addTodo(title: string): void {
+    const newTodo: Todo = {
+      id: Date.now().toString(),
+      title,
+      completed: false
+    };
+    this.todos.update(todos => [...todos, newTodo]);
   }
 
-  adicionar(item: Item) { this.items.update(list => [...list, item]); }
+  toggleTodo(id: string): void {
+    this.todos.update(todos =>
+      todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t)
+    );
+  }
+
+  removeTodo(id: string): void {
+    this.todos.update(todos => todos.filter(t => t.id !== id));
+  }
 }
