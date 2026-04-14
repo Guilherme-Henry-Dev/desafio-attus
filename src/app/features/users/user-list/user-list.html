@@ -1,1 +1,24 @@
-<p>user-list works!</p>
+<div class="card">
+  <h2>Lista de Usuários</h2>
+  <div class="search">
+    <input type="text" [formControl]="searchControl" placeholder="Buscar usuário...">
+  </div>
+  <button (click)="openModal()">Adicionar Usuário</button>
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else {
+    <div class="user-list">
+      @for (user of users(); track user.id) {
+        <div class="user-card">
+          <h3>{{ user.name }}</h3>
+          <p>Email: {{ user.email }}</p>
+          <p>CPF: {{ user.cpf }}</p>
+          <p>Telefone: {{ user.phone }} ({{ user.phoneType }})</p>
+          <button (click)="editUser(user)">Editar</button>
+          <button (click)="deleteUser(user.id!)" style="background: red;">Excluir</button>
+        </div>
+      }
+    </div>
+  }
+</div>

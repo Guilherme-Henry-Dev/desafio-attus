@@ -1,0 +1,30 @@
+.card {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.search input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.user-card button {
+  margin-right: 5px;
+  padding: 5px 10px;
+}
