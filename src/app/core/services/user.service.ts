@@ -13,12 +13,15 @@ export class UserService {
   private filterQuery = signal('');
 
   filteredUsers = computed(() => {
-    const query = this.filterQuery().toLowerCase();
-    return this.usersState().filter(user => user.name.toLowerCase().includes(query));
+    const query = this.filterQuery().toLowerCase().trim();
+    return this.usersState().filter(user => {
+      const searchable = `${user.name} ${user.email} ${user.cpf} ${user.phone}`.toLowerCase();
+      return searchable.includes(query);
+    });
   });
 
   loadUsers(query: string = ''): Observable<User[]> {
-    this.filterQuery.set(query);
+    this.filterQuery.set(query || '');
     this.loading.set(true);
 
     return of(this.filteredUsers()).pipe(

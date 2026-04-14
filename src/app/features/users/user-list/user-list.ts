@@ -27,6 +27,14 @@ export class UserListComponent implements OnInit {
   protected selectedUser?: User;
   protected userForm: FormGroup;
 
+  get isModalOpen(): boolean {
+    return this.modalOpen;
+  }
+
+  get modalTitle(): string {
+    return this.selectedUser ? 'Editar usuário' : 'Adicionar novo usuário';
+  }
+
   constructor() {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
@@ -50,7 +58,6 @@ export class UserListComponent implements OnInit {
 
   openModal(user?: User): void {
     this.selectedUser = user;
-    this.modalOpen = true;
 
     if (user) {
       this.userForm.setValue({
@@ -63,15 +70,19 @@ export class UserListComponent implements OnInit {
     } else {
       this.userForm.reset({ phoneType: 'CELULAR' });
     }
+
+    this.modalOpen = true;
   }
 
   closeModal(): void {
     this.modalOpen = false;
     this.selectedUser = undefined;
+    this.userForm.reset({ phoneType: 'CELULAR' });
   }
 
   saveUser(): void {
     if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
       return;
     }
 

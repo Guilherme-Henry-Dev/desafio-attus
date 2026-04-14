@@ -27,9 +27,11 @@
           <div class="user-info">
             <strong>{{ user.name }}</strong>
             <span>{{ user.email }}</span>
+            <small>{{ user.cpf }} · {{ user.phone }}</small>
           </div>
           <div class="user-actions">
             <button class="icon-button" type="button" (click)="openModal(user)">Editar</button>
+            <button class="icon-button danger" type="button" (click)="deleteUser(user.id!)">Excluir</button>
           </div>
         </div>
       }

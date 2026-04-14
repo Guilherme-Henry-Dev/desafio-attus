@@ -24,4 +24,19 @@ describe('UserService', () => {
     const user = await lastValueFrom(service.addUser(newUser));
     expect(user.name).toBe('Test');
   });
+
+  it('should update user', async () => {
+    const newUser = { name: 'Test', email: 'test@test.com', cpf: '123', phone: '123', phoneType: 'CELULAR' as const };
+    const createdUser = await lastValueFrom(service.addUser(newUser));
+    const updatedUser = await lastValueFrom(service.updateUser(createdUser.id!, { name: 'Updated' }));
+    expect(updatedUser.name).toBe('Updated');
+  });
+
+  it('should delete user', async () => {
+    const newUser = { name: 'Test', email: 'test@test.com', cpf: '123', phone: '123', phoneType: 'CELULAR' as const };
+    const createdUser = await lastValueFrom(service.addUser(newUser));
+    await lastValueFrom(service.deleteUser(createdUser.id!));
+    const remainingUsers = await lastValueFrom(service.loadUsers());
+    expect(remainingUsers.find(user => user.id === createdUser.id)).toBeUndefined();
+  });
 });
