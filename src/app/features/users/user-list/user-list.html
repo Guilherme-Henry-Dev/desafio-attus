@@ -3,7 +3,7 @@
   <div class="search">
     <input type="text" [formControl]="searchControl" placeholder="Buscar usuário...">
   </div>
-  <button (click)="openModal()">Adicionar Usuário</button>
+  <button class="primary" (click)="openModal()">Adicionar Usuário</button>
 
   @if (loading()) {
     <p>Carregando...</p>
@@ -12,13 +12,60 @@
       @for (user of users(); track user.id) {
         <div class="user-card">
           <h3>{{ user.name }}</h3>
-          <p>Email: {{ user.email }}</p>
-          <p>CPF: {{ user.cpf }}</p>
-          <p>Telefone: {{ user.phone }} ({{ user.phoneType }})</p>
-          <button (click)="editUser(user)">Editar</button>
-          <button (click)="deleteUser(user.id!)" style="background: red;">Excluir</button>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>CPF:</strong> {{ user.cpf }}</p>
+          <p><strong>Telefone:</strong> {{ user.phone }} ({{ user.phoneType }})</p>
+          <div class="actions">
+            <button class="secondary" (click)="openModal(user)">Editar</button>
+            <button class="danger" (click)="deleteUser(user.id!)">Excluir</button>
+          </div>
         </div>
+      }
+      @if (users().length === 0) {
+        <p>Nenhum usuário encontrado.</p>
       }
     </div>
   }
 </div>
+
+@if (modalOpen) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <h3>{{ selectedUser ? 'Editar usuário' : 'Adicionar usuário' }}</h3>
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+        <label>
+          Nome
+          <input formControlName="name" />
+        </label>
+
+        <label>
+          Email
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label>
+          CPF
+          <input formControlName="cpf" />
+        </label>
+
+        <label>
+          Telefone
+          <input formControlName="phone" />
+        </label>
+
+        <label>
+          Tipo de telefone
+          <select formControlName="phoneType">
+            <option value="CELULAR">Celular</option>
+            <option value="FIXO">Fixo</option>
+          </select>
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="primary" [disabled]="userForm.invalid">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

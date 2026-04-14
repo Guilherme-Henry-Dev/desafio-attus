@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+﻿import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../core/services/user.service';
@@ -18,50 +18,82 @@ import { User } from '../../../core/models/user.model';
 })
 export class UserListComponent implements OnInit {
   private readonly userService = inject(UserService);
+  private readonly fb = inject(FormBuilder);
 
-  protected users = this.userService.users;
+  protected users = this.userService.filteredUsers;
   protected loading = this.userService.loading;
-
   protected searchControl = new FormControl('');
+  protected modalOpen = false;
+  protected selectedUser?: User;
+  protected userForm: FormGroup;
 
   constructor() {
+    this.userForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      cpf: ['', Validators.required],
+      phone: ['', Validators.required],
+      phoneType: ['CELULAR', Validators.required]
+    });
+
     this.searchControl.valueChanges.pipe(
-      debounceTime(300), 
+      debounceTime(300),
       distinctUntilChanged(),
       switchMap(query => this.userService.loadUsers(query || '')),
-      takeUntilDestroyed() 
+      takeUntilDestroyed()
     ).subscribe();
   }
 
   ngOnInit(): void {
-    this.userService.loadUsers('');
+    this.userService.loadUsers('').subscribe();
   }
 
   openModal(user?: User): void {
-    const action = user ? 'editar' : 'adicionar';
-    const name = user ? user.name : '';
-    const newName = prompt(`Digite o nome do usuário para ${action}:`, name);
-    if (newName) {
-      if (user) {
-        this.userService.updateUser(user.id!, { ...user, name: newName }).subscribe(() => {
-          this.userService.loadUsers(this.searchControl.value || '');
-        });
-      } else {
-        this.userService.addUser({ name: newName, email: '', cpf: '', phone: '', phoneType: 'CELULAR' }).subscribe(() => {
-          this.userService.loadUsers(this.searchControl.value || '');
-        });
-      }
+    this.selectedUser = user;
+    this.modalOpen = true;
+
+    if (user) {
+      this.userForm.setValue({
+        name: user.name,
+        email: user.email,
+        cpf: user.cpf,
+        phone: user.phone,
+        phoneType: user.phoneType
+      });
+    } else {
+      this.userForm.reset({ phoneType: 'CELULAR' });
     }
   }
 
-  editUser(user: User): void {
-    this.openModal(user);
+  closeModal(): void {
+    this.modalOpen = false;
+    this.selectedUser = undefined;
+  }
+
+  saveUser(): void {
+    if (this.userForm.invalid) {
+      return;
+    }
+
+    const formValue = this.userForm.value as Omit<User, 'id'>;
+
+    if (this.selectedUser) {
+      this.userService.updateUser(this.selectedUser.id!, formValue).subscribe(() => {
+        this.userService.loadUsers(this.searchControl.value || '').subscribe();
+        this.closeModal();
+      });
+    } else {
+      this.userService.addUser(formValue).subscribe(() => {
+        this.userService.loadUsers(this.searchControl.value || '').subscribe();
+        this.closeModal();
+      });
+    }
   }
 
   deleteUser(id: string): void {
     if (confirm('Tem certeza que deseja excluir?')) {
       this.userService.deleteUser(id).subscribe(() => {
-        this.userService.loadUsers(this.searchControl.value || '');
+        this.userService.loadUsers(this.searchControl.value || '').subscribe();
       });
     }
   }

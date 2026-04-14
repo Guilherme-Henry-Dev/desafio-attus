@@ -10,16 +10,19 @@ export class UserService {
   
   users = this.usersState.asReadonly();
   loading = signal(false);
+  private filterQuery = signal('');
+
+  filteredUsers = computed(() => {
+    const query = this.filterQuery().toLowerCase();
+    return this.usersState().filter(user => user.name.toLowerCase().includes(query));
+  });
 
   loadUsers(query: string = ''): Observable<User[]> {
+    this.filterQuery.set(query);
     this.loading.set(true);
-    
-    const filtered = this.usersState().filter(u => 
-      u.name.toLowerCase().includes(query.toLowerCase())
-    );
 
-    return of(filtered).pipe(
-      delay(500), 
+    return of(this.filteredUsers()).pipe(
+      delay(500),
       tap(() => this.loading.set(false))
     );
   }
