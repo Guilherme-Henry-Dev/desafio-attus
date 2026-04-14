@@ -8,5 +8,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('desafio-attus');
+  protected readonly title = signal('Desafio Attus - CRUD de Usuários');
 }
