@@ -11,7 +11,7 @@
 
 1. Certifique-se de ter o Node.js instalado (v18.13+).
 2. Clone o repositório:
-   \`git clone https://github.com/SEU-USUARIO/desafio-attus.git\`
+   \`git clone https://github.com/Guilherme-Henry-Dev/desafio-attus.git\`
 3. Instale as dependências:
    \`npm install\`
 4. Inicie o servidor de desenvolvimento:
@@ -20,4 +20,4 @@
 
 ## 🧪 Como rodar os testes
 Para rodar a suíte de testes unitários:
-\`npm run test\`
+\`npm  test\`
