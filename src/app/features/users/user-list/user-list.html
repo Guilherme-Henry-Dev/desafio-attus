@@ -1,65 +1,85 @@
-<div class="card">
-  <h2>Lista de Usuários</h2>
-  <div class="search">
-    <input type="text" [formControl]="searchControl" placeholder="Buscar usuário...">
+<div class="page-header">
+  <div class="page-title">
+    <div class="title-badge">USUÁRIOS</div>
   </div>
-  <button class="primary" (click)="openModal()">Adicionar Usuário</button>
+  <div class="page-actions">
+    <div class="search">
+      <input type="text" [formControl]="searchControl" placeholder="Pesquisar..." />
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span>Usuários cadastrados</span>
+  </div>
 
   @if (loading()) {
-    <p>Carregando...</p>
+    <div class="empty-state">Carregando usuários...</div>
   } @else {
     <div class="user-list">
+      @if (users().length === 0) {
+        <div class="empty-state">Nenhum usuário encontrado.</div>
+      }
       @for (user of users(); track user.id) {
-        <div class="user-card">
-          <h3>{{ user.name }}</h3>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-          <p><strong>CPF:</strong> {{ user.cpf }}</p>
-          <p><strong>Telefone:</strong> {{ user.phone }} ({{ user.phoneType }})</p>
-          <div class="actions">
-            <button class="secondary" (click)="openModal(user)">Editar</button>
-            <button class="danger" (click)="deleteUser(user.id!)">Excluir</button>
+        <div class="user-row">
+          <div class="user-avatar">👤</div>
+          <div class="user-info">
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.email }}</span>
+          </div>
+          <div class="user-actions">
+            <button class="icon-button" type="button" (click)="openModal(user)">Editar</button>
           </div>
         </div>
-      }
-      @if (users().length === 0) {
-        <p>Nenhum usuário encontrado.</p>
       }
     </div>
   }
 </div>
 
+<button class="fab" type="button" (click)="openModal()">+</button>
+
 @if (modalOpen) {
   <div class="modal-backdrop">
     <div class="modal">
-      <h3>{{ selectedUser ? 'Editar usuário' : 'Adicionar usuário' }}</h3>
+      <div class="modal-title">{{ selectedUser ? 'Editar usuário' : 'Adicionar novo usuário' }}</div>
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
-        <label>
-          Nome
-          <input formControlName="name" />
-        </label>
+        <div class="field-row">
+          <label class="field-label">
+            Usuário (e-mail) *
+            <input type="email" formControlName="email" placeholder="nome@empresa.com" />
+          </label>
+        </div>
 
-        <label>
-          Email
-          <input type="email" formControlName="email" />
-        </label>
+        <div class="field-row">
+          <label class="field-label">
+            Nome completo *
+            <input formControlName="name" placeholder="Nome e sobrenome" />
+          </label>
+        </div>
 
-        <label>
-          CPF
-          <input formControlName="cpf" />
-        </label>
+        <div class="field-grid">
+          <label class="field-label">
+            CPF *
+            <input formControlName="cpf" placeholder="000.000.000-00" />
+          </label>
+          <label class="field-label">
+            Número do telefone *
+            <input formControlName="phone" placeholder="(00) 00000-0000" />
+          </label>
+        </div>
 
-        <label>
-          Telefone
-          <input formControlName="phone" />
-        </label>
+        <div class="field-row">
+          <label class="field-label">
+            Tipo de telefone
+            <select formControlName="phoneType">
+              <option value="CELULAR">CELULAR</option>
+              <option value="FIXO">FIXO</option>
+            </select>
+          </label>
+        </div>
 
-        <label>
-          Tipo de telefone
-          <select formControlName="phoneType">
-            <option value="CELULAR">Celular</option>
-            <option value="FIXO">Fixo</option>
-          </select>
-        </label>
+        <div class="note">O usuário receberá uma senha provisória por SMS.</div>
 
         <div class="modal-actions">
           <button type="button" class="secondary" (click)="closeModal()">Cancelar</button>
