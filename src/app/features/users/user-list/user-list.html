@@ -1,99 +1,86 @@
-<div class="page-header">
-  <div class="page-title">
-    <div class="title-badge">USUÁRIOS</div>
-    <h1>Listagem de usuários</h1>
-  </div>
-  <div class="page-actions">
-    <div class="search-field">
-      <label class="input-label" for="search">Pesquisar</label>
-      <input id="search" type="text" [formControl]="searchControl" placeholder="Nome, e-mail, CPF ou telefone" />
+<div class="top-bar">
+  <div class="top-bar-content">
+    <div class="menu-brand">
+      <span class="material-icons">Usuário</span>
+      <span class="brand-name">Attus</span>
+    </div>
+    <div class="top-search">
+      <span class="material-icons">search</span>
+      <input type="text" [formControl]="searchControl" placeholder="Pesquisar...">
     </div>
   </div>
 </div>
 
-<div class="list-card">
-  <div class="list-card-header">Usuários cadastrados</div>
+<div class="main-content">
+  <div class="list-section">
+    <div class="section-label">Usuários cadastrados</div>
 
-  @if (error()) {
-    <div class="error-state">{{ error() }}</div>
-  } @else if (loading()) {
-    <div class="loading-state">Carregando usuários...</div>
-  } @else {
-    <div class="user-list">
-      @if (users().length === 0) {
-        <div class="empty-state">Nenhum usuário encontrado.</div>
-      }
-      @for (user of users(); track user.id) {
-        <div class="user-card">
-          <div class="user-card-content">
-            <div class="user-card-details">
-              <div class="user-name">{{ user.name }}</div>
-              <div class="user-email">{{ user.email }}</div>
-              <div class="user-meta">{{ user.cpf }} · {{ user.phone }}</div>
+    @if (loading()) {
+      <div class="loading-state">Carregando...</div>
+    } @else {
+      <div class="user-table">
+        @for (user of users(); track user.id) {
+          <div class="user-row">
+            <div class="user-info">
+              <span class="material-icons user-icon">person</span>
+              <span class="name">{{ user.name }}</span>
+              <span class="email">{{ user.email }}</span>
             </div>
-            <div class="user-actions">
-              <button class="edit-button" type="button" (click)="openModal(user)">Editar</button>
-              <button class="delete-button" type="button" (click)="deleteUser(user.id!)">Excluir</button>
+            <div class="user-row-actions">
+              <button class="icon-button" (click)="openModal(user)">
+                <span class="material-icons">edit</span>
+              </button>
             </div>
           </div>
-        </div>
-      }
-    </div>
-  }
+        }
+      </div>
+    }
+  </div>
 </div>
 
-<button class="fab" type="button" (click)="openModal()">+</button>
+<button class="fab-main" (click)="openModal()">
+  <span class="material-icons">add</span>
+</button>
 
 @if (modalOpen) {
   <div class="modal-backdrop">
     <div class="modal-card">
-      <div class="modal-title">{{ modalTitle }}</div>
+      <div class="modal-header">Adicionar novo usuário</div>
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
-        <div class="field-row">
-          <label class="field-label">
-            E-mail
-            <input type="email" formControlName="email" placeholder="nome@empresa.com" />
-            <span class="field-error" *ngIf="emailControl.hasError('required')">E-mail obrigatório.</span>
-            <span class="field-error" *ngIf="emailControl.hasError('email')">Formato de e-mail inválido.</span>
-          </label>
+        <div class="form-field">
+          <label>Usuário (e-mail) *</label>
+          <input type="email" formControlName="email">
+        </div>
+        
+        <div class="form-field">
+          <label>Nome completo *</label>
+          <input formControlName="name">
         </div>
 
-        <div class="field-row">
-          <label class="field-label">
-            Nome completo
-            <input formControlName="name" placeholder="Nome e sobrenome" />
-            <span class="field-error" *ngIf="nameControl.hasError('required')">Nome é obrigatório.</span>
-          </label>
-        </div>
-
-        <div class="field-grid">
-          <label class="field-label">
-            CPF
-            <input formControlName="cpf" placeholder="000.000.000-00" />
-            <span class="field-error" *ngIf="cpfControl.hasError('required')">CPF é obrigatório.</span>
-          </label>
-          <label class="field-label">
-            Telefone
-            <input formControlName="phone" placeholder="(00) 00000-0000" />
-            <span class="field-error" *ngIf="phoneControl.hasError('required')">Telefone é obrigatório.</span>
-          </label>
-        </div>
-
-        <div class="field-row">
-          <label class="field-label">
-            Tipo de telefone
+        <div class="form-row">
+          <div class="form-field">
+            <label>CPF *</label>
+            <input formControlName="cpf">
+          </div>
+          <div class="form-field">
+            <label>Número do telefone *</label>
+            <input formControlName="phone">
+          </div>
+          <div class="form-field">
+            <label>Tipo</label>
             <select formControlName="phoneType">
               <option value="CELULAR">CELULAR</option>
               <option value="FIXO">FIXO</option>
             </select>
-          </label>
+          </div>
         </div>
 
-        <div class="note">O usuário receberá uma senha provisória por SMS.</div>
+        <div class="modal-note">
+          O usuário receberá uma senha provisória para acesso ao sistema por SMS.
+        </div>
 
-        <div class="modal-actions">
-          <button class="secondary" type="button" (click)="closeModal()">Cancelar</button>
-          <button class="primary" type="submit" [disabled]="userForm.invalid">Salvar</button>
+        <div class="modal-footer">
+          <button type="submit" class="btn-save" [disabled]="userForm.invalid">SALVAR</button>
         </div>
       </form>
     </div>
