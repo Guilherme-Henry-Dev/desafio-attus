@@ -37,6 +37,23 @@ describe('UserService', () => {
     const createdUser = await lastValueFrom(service.addUser(newUser));
     await lastValueFrom(service.deleteUser(createdUser.id!));
     const remainingUsers = await lastValueFrom(service.loadUsers());
-    expect(remainingUsers.find(user => user.id === createdUser.id)).toBeUndefined();
+    expect(remainingUsers.find((user: any) => user.id === createdUser.id)).toBeUndefined();
+  });
+
+  it('should filter users', async () => {
+    const newUser = { name: 'João Silva', email: 'joao@test.com', cpf: '123', phone: '123', phoneType: 'CELULAR' as const };
+    await lastValueFrom(service.addUser(newUser));
+    await lastValueFrom(service.loadUsers('João'));
+    const filtered = service.filteredUsers();
+    expect(filtered.length).toBe(1);
+    expect(filtered[0].name).toBe('João Silva');
+  });
+
+  it('should handle loading state', async () => {
+    expect(service.loading()).toBe(false);
+    const promise = lastValueFrom(service.loadUsers(''));
+    expect(service.loading()).toBe(true);
+    await promise;
+    expect(service.loading()).toBe(false);
   });
 });
