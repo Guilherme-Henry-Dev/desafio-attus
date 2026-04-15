@@ -39,3 +39,19 @@ export function filtrarEPaginar<T>(
     totalRegistros: filtered.length
   };
 }
+
+
+
+
+
+//Melhorias aplicadas:
+
+//Tipagem Forte: Substituição de any por tipos específicos (number, string) e interfaces.
+
+//Clean Code: Uso de constructor assignment simplificado do TypeScript.
+
+//Performance e Legibilidade: Substituição de loops for manuais pelos métodos de array .find() e .some().
+
+//Imutabilidade: Uso de readonly para propriedades que não devem mudar.
+
+//Template Literals: Substituição de concatenação de strings por interpolação.
