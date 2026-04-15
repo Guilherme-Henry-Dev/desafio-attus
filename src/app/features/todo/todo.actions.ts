@@ -6,7 +6,6 @@ export interface Todo {
   completed: boolean;
 }
 
-// Actions
 export const loadTodos = createAction('[Todo] Load Todos');
 export const loadTodosSuccess = createAction(
   '[Todo] Load Todos Success',

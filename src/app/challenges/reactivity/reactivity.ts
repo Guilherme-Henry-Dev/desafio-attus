@@ -33,7 +33,7 @@ export class ReactivityComponent implements OnInit {
       this.cdr.markForCheck();
     }, 1000);
 
-    const pessoaId = 2; // Exemplo
+    const pessoaId = 2; 
     this.pessoaService.buscarPorId(pessoaId).pipe(
       switchMap(pessoa =>
         this.pessoaService.buscarQuantidadeFamiliares(pessoa.id).pipe(

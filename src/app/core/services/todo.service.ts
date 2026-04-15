@@ -13,7 +13,7 @@ export interface Todo {
 export class TodoService {
   constructor(private http: HttpClient) {}
 
-  // Mock HTTP call - substitua pela URL real da API
+
   loadTodos(): Observable<Todo[]> {
     return of([
       { id: '1', title: 'Learn Angular', completed: false },

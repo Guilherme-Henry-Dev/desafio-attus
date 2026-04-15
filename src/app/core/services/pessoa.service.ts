@@ -20,7 +20,7 @@ export class PessoaService {
   }
 
   buscarQuantidadeFamiliares(id: number): Observable<number> {
-    // Simular busca
+  
     return of(Math.floor(Math.random() * 5) + 1).pipe(delay(500));
   }
 }
