@@ -16,24 +16,24 @@
     <div class="section-label">Usuários cadastrados</div>
 
     @if (loading()) {
-      <div class="loading-state">Carregando...</div>
+    <div class="loading-state">Carregando...</div>
     } @else {
-      <div class="user-table">
-        @for (user of users(); track user.id) {
-          <div class="user-row">
-            <div class="user-info">
-              <span class="material-icons user-icon">person</span>
-              <span class="name">{{ user.name }}</span>
-              <span class="email">{{ user.email }}</span>
-            </div>
-            <div class="user-row-actions">
-              <button class="icon-button" (click)="openModal(user)">
-                <span class="material-icons">edit</span>
-              </button>
-            </div>
-          </div>
-        }
+    <div class="user-table">
+      @for (user of users(); track user.id) {
+      <div class="user-row">
+        <div class="user-info">
+          <span class="material-icons user-icon">person</span>
+          <span class="name">{{ user.name }}</span>
+          <span class="email">{{ user.email }}</span>
+        </div>
+        <div class="user-row-actions">
+          <button class="icon-button" (click)="openModal(user)">
+            <span class="material-icons">edit</span>
+          </button>
+        </div>
       </div>
+      }
+    </div>
     }
   </div>
 </div>
@@ -43,46 +43,49 @@
 </button>
 
 @if (modalOpen) {
-  <div class="modal-backdrop">
-    <div class="modal-card">
-      <div class="modal-header">Adicionar novo usuário</div>
-      <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+<div class="modal-backdrop">
+  <div class="modal-card">
+    <div class="modal-header">Adicionar novo usuário</div>
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+      <div class="form-field">
+        <label>Usuário (e-mail) *</label>
+        <input type="email" formControlName="email">
+        @if (userForm.get('email')?.errors?.['email'] && userForm.get('email')?.touched) {
+        <small class="error-text">E-mail inválido.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label>Nome completo *</label>
+        <input formControlName="name">
+      </div>
+
+      <div class="form-row">
         <div class="form-field">
-          <label>Usuário (e-mail) *</label>
-          <input type="email" formControlName="email">
+          <label>CPF *</label>
+          <input formControlName="cpf">
         </div>
-        
         <div class="form-field">
-          <label>Nome completo *</label>
-          <input formControlName="name">
+          <label>Número do telefone *</label>
+          <input formControlName="phone">
         </div>
+        <div class="form-field">
+          <label>Tipo</label>
+          <select formControlName="phoneType">
+            <option value="CELULAR">CELULAR</option>
+            <option value="FIXO">FIXO</option>
+          </select>
+        </div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-field">
-            <label>CPF *</label>
-            <input formControlName="cpf">
-          </div>
-          <div class="form-field">
-            <label>Número do telefone *</label>
-            <input formControlName="phone">
-          </div>
-          <div class="form-field">
-            <label>Tipo</label>
-            <select formControlName="phoneType">
-              <option value="CELULAR">CELULAR</option>
-              <option value="FIXO">FIXO</option>
-            </select>
-          </div>
-        </div>
+      <div class="modal-note">
+        O usuário receberá uma senha provisória para acesso ao sistema por SMS.
+      </div>
 
-        <div class="modal-note">
-          O usuário receberá uma senha provisória para acesso ao sistema por SMS.
-        </div>
-
-        <div class="modal-footer">
-          <button type="submit" class="btn-save" [disabled]="userForm.invalid">SALVAR</button>
-        </div>
-      </form>
-    </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn-save" [disabled]="userForm.invalid">SALVAR</button>
+      </div>
+    </form>
   </div>
+</div>
 }

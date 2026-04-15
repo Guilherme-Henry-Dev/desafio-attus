@@ -184,3 +184,14 @@
   cursor: pointer;
   &:disabled { background: #ccc; }
 }
+
+.error-text {
+  color: var(--material-red);
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+input.ng-invalid.ng-touched {
+  border-bottom: 2px solid var(--material-red) !important;
+}
