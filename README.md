@@ -1,4 +1,12 @@
-# Desafio Frontend - Angular 17+
+# 🚀 Desafio Frontend Attus - Gestão de Usuários
+
+Este projeto é uma aplicação de gerenciamento de usuários desenvolvida com **Angular 17+**, focada em alta performance reativa e conformidade com as melhores práticas de Clean Code e UI/UX.
+
+## 🛠️ Decisões Técnicas e Diferenciais
+- **Reatividade com Signals:** Implementação de gerenciamento de estado local utilizando `signal` e `computed` para evitar detecções de mudança desnecessárias.
+- **RxJS Avançado:** Uso de `debounceTime` e `distinctUntilChanged` na busca para otimizar chamadas, e `switchMap` para garantir a integridade dos dados durante requisições assíncronas.
+- **Validações Customizadas:** Além dos campos obrigatórios, foram implementadas validações de formato para e-mail e lógica de tratamento de dados.
+- **Gerenciamento de Memória:** Uso de `takeUntilDestroyed` do Angular Interop para prevenir memory leaks.
 
 ## 🚀 Tecnologias Utilizadas
 - Angular 17 (Standalone Components, Control Flow `@for/@if`)
