@@ -26,7 +26,7 @@ export class UserListComponent implements OnInit {
   protected searchControl = new FormControl('');
   protected modalOpen = false;
   protected selectedUser?: User;
-  protected userForm: FormGroup;
+  protected userForm: FormGroup; 
 
   constructor() {
     this.userForm = this.fb.group({
@@ -96,6 +96,7 @@ export class UserListComponent implements OnInit {
   saveUser(): void {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
+      alert('Por favor, Por favor, preencha todos os campos obrigatórios corretamente antes de salvar. todos os campos')
       return;
     }
 

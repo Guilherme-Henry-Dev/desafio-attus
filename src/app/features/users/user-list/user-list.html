@@ -50,8 +50,12 @@
       <div class="form-field">
         <label>Usuário (e-mail) *</label>
         <input type="email" formControlName="email">
-        @if (userForm.get('email')?.errors?.['email'] && userForm.get('email')?.touched) {
-        <small class="error-text">E-mail inválido.</small>
+        @if (userForm.get('email')?.touched) {
+        @if (userForm.get('email')?.errors?.['required']) {
+        <small class="error-text">O e-mail é obrigatório.</small>
+        } @else if (userForm.get('email')?.errors?.['email']) {
+        <small class="error-text">Por favor, insira um e-mail válido.</small>
+        }
         }
       </div>
 
