@@ -63,6 +63,6 @@ describe('TodoReducer', () => {
     const result = todoReducer(initialState, action);
 
     expect(result.todos[0].completed).toBe(true);
-    expect(result.todos[1].completed).toBe(true); // unchanged
+    expect(result.todos[1].completed).toBe(true); 
   });
 });
