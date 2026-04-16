@@ -5,13 +5,15 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
+import { MaskDirective } from '../../../shared/directives/mask.directive';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaskDirective
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.scss'
